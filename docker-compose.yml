@@ -1,5 +1,4 @@
 version: '3.1'
-
 services:
   zookeeper:
     image: zookeeper
@@ -7,10 +6,11 @@ services:
     restart: always
 
   nimbus:
-    image: storm
+    build: jfr_storm/.
+    image: jfr_storm
     container_name: my_nimbus
-    command: storm nimbus
-    depends_on:
+    command: storm nimbus -c nimbus.task.timeout.secs='13'
+    depends_on: 
       - zookeeper
     links:
       - zookeeper
@@ -19,7 +19,8 @@ services:
       - 6627:6627
 
   supervisor:
-    image: storm
+    build: jfr_storm/.
+    image: jfr_storm
     container_name: my_supervisor_1
     command: storm supervisor
     depends_on:
@@ -38,6 +39,8 @@ services:
       - nimbus
     links:
      - nimbus
+     - supervisor
+# - supervisor
     restart: always
     ports: 
      - 8080:8080
@@ -55,10 +58,11 @@ services:
      - nimbus
      - supervisor
     restart: always 
-#  grafana:
-#    image:
+
+  # grafana:
+#    image: grafana/grafana
 #    container_name: storm_grafana
-#    ports:
+#    ports: 3000:3000
 #    links:
 #      - graphite
 #    restart: always

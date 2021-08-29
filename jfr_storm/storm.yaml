@@ -1,0 +1,32 @@
+storm.zookeeper.servers: [zookeeper]
+nimbus.seeds: [nimbus]
+storm.log.dir: "/logs"
+storm.local.dir: "/data"
+# just to see if its taking the correct config now
+nimbus.code.freq.secs: 118
+#metrics reporter
+storm.metrics.reporters:
+#  Graphite Reporter
+  - class: "org.apache.storm.metrics2.reporters.GraphiteStormReporter"
+    daemons:
+        - "supervisor"
+        - "nimbus"
+        - "worker"
+    report.period: 10
+    report.period.units: "SECONDS"
+    graphite.host: "localhost"
+    graphite.port: 8125
+
+ # Console Reporter
+  - class: "org.apache.storm.metrics2.reporters.ConsoleStormReporter"
+    daemons:
+        - "worker"
+        - "nimbus"
+        - "supervisor"
+    report.period: 10
+    report.period.units: "SECONDS"
+    filter:
+        class: "org.apache.storm.metrics2.filters.RegexFilter"
+        expression: ".*my_component.*emitted.*"
+
+
