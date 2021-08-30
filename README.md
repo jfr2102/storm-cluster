@@ -1,2 +1,11 @@
 # storm-cluster
-Docker Storm cluster with Graphite connection
+Storm cluster on Docker with Graphite(+Grafana) Metrics Reporter
+
+build and start container:
+```bash
+$ ./build.sh 
+```
+or:
+```sh
+$ sudo docker-compose up --build
+```
