@@ -9,7 +9,8 @@ services:
     build: jfr_storm/.
     image: jfr_storm
     container_name: my_nimbus
-    command: storm nimbus -c nimbus.task.timeout.secs='13'
+    command: storm nimbus
+    #-c nimbus.task.timeout.secs='13'
     depends_on: 
       - zookeeper
     links:
@@ -30,6 +31,9 @@ services:
       - nimbus
       - zookeeper
     restart: always
+    # test ob dann http://644e5353ce74:8000/api/v1/daemonlog?file=supervisor.log erreichbar
+    ports:
+     - 8000:8000
 
   ui:
     image: storm
@@ -59,13 +63,13 @@ services:
      - supervisor
     restart: always 
 
-  # grafana:
-#    image: grafana/grafana
-#    container_name: storm_grafana
-#    ports: 3000:3000
-#    links:
-#      - graphite
-#    restart: always
+# grafana:
+#   image: grafana/grafana
+#   container_name: storm_grafana
+#   ports: 3000:3000
+#   links:
+#   - graphite
+#   restart: always
     
 
 
