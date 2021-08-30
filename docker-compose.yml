@@ -52,11 +52,14 @@ services:
   graphite:
     image: graphiteapp/graphite-statsd
     container_name: storm_graphite
+    environment:
+    - STATSD_INTERFACE=tcp
     ports:
     - 80:80
     - 2003-2004:2003-2004
     - 2023-2024:2023-2024
-    - 8125:8125/udp
+    - 8125:8125
+    #- 8125:8125/udp
     - 8126:8126
     links:
      - nimbus
