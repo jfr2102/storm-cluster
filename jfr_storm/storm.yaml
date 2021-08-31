@@ -3,7 +3,7 @@ nimbus.seeds: [nimbus]
 storm.log.dir: "/logs"
 storm.local.dir: "/data"
 # just to see if its taking the correct config now
-nimbus.code.freq.secs: 118
+#nimbus.code.freq.secs: 118
 
 #Unrecognized VM option 'PrintGCDateStamps' in worker logs, Worker crashing
 #https://stackoverflow.com/questions/56902645/topology-just-idles-on-storm-in-remote-mode
@@ -20,7 +20,7 @@ storm.metrics.reporters:
         - "worker"
     report.period: 10
     report.period.units: "SECONDS"
-    graphite.host: "172.19.0.6"
+    graphite.host: "graphite"
     graphite.port: 2003
 
  # Console Reporter
