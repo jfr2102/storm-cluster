@@ -18,10 +18,10 @@ storm.metrics.reporters:
         - "supervisor"
         - "nimbus"
         - "worker"
-    report.period: 1
+    report.period: 10
     report.period.units: "SECONDS"
-    graphite.host: "localhost"
-    graphite.port: 8125
+    graphite.host: "172.19.0.6"
+    graphite.port: 2003
 
  # Console Reporter
   - class: "org.apache.storm.metrics2.reporters.ConsoleStormReporter"
@@ -31,8 +31,17 @@ storm.metrics.reporters:
         - "supervisor"
     report.period: 10
     report.period.units: "SECONDS"
-    filter:
-        class: "org.apache.storm.metrics2.filters.RegexFilter"
-        expression: ".*my_component.*emitted.*"
+    #filter:
+    #    class: "org.apache.storm.metrics2.filters.RegexFilter"
+    #    expression: ".*my_component.*emitted.*"
+# CSV Reporter      
+  # - class: "org.apache.storm.metrics2.reporters.CsvStormReporter"
+  #   deamons:
+  #     - "supervisor"
+  #     - "worker"
+  #     - "nimbus"
+  #   report.period: 10
+  #   report.period.units: "SECONDS"
+  #   csv.log.dir: "/log/csvlogging/"
 
 
