@@ -3,6 +3,8 @@ Storm cluster on Docker with Graphite (+ Grafana) Metrics Reporter.
 
 Based on [Offical Apache Storm docker image](https://hub.docker.com/_/storm) , [Official docker image for Graphite](https://hub.docker.com/r/graphiteapp/graphite-statsd) and [The official Grafana docker container](https://hub.docker.com/r/grafana/grafana)
 
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Apache_Storm_logo.svg/1200px-Apache_Storm_logo.svg.png" width="400" height="133" />
+
 Usage
 -----
 
