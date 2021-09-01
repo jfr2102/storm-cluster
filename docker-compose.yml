@@ -22,7 +22,7 @@ services:
   supervisor:
     build: jfr_storm/.
     image: jfr_storm
-    container_name: my_supervisor_1
+    #container_name: my_supervisor_1
     command: storm supervisor
     depends_on:
       - nimbus
@@ -32,8 +32,6 @@ services:
       - zookeeper
     restart: always
     # test ob dann http://644e5353ce74:8000/api/v1/daemonlog?file=supervisor.log erreichbar
-    ports:
-     - 8000:8000
 
   ui:
     image: storm
@@ -73,4 +71,8 @@ services:
     - 3000:3000
     links:
     - graphite
+    volumes:
+    - grafana-storage:/var/lib/grafana
     restart: always
+volumes:
+  grafana-storage:
