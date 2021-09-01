@@ -1,5 +1,6 @@
 # Storm-cluster
-Storm cluster on Docker with Graphite (+ Grafana) Metrics Reporter.
+Storm docker cluster using docker-compose. 
+Including Graphite container for Storms [Metrics Reporting API v2](https://storm.apache.org/releases/2.2.0/metrics_v2.html) and Grafana for metrics visualization.
 
 Based on [Offical Apache Storm docker image](https://hub.docker.com/_/storm) , [Official docker image for Graphite](https://hub.docker.com/r/graphiteapp/graphite-statsd) and [The official Grafana docker container](https://hub.docker.com/r/grafana/grafana)
 
@@ -8,7 +9,7 @@ Based on [Offical Apache Storm docker image](https://hub.docker.com/_/storm) , [
 Usage
 -----
 
-build and start container:
+### rebuild and start container:
 ```bash
 $ ./build.sh 
 ```
@@ -16,14 +17,24 @@ or:
 ```sh
 $ sudo docker-compose up --build
 ```
-Get a cmdline on nimbus / supervisor:
+### Get a cmdline on nimbus / supervisor:
 ```bash
 $ ./nimbus
 ```
-Run topology on nimbus (with shell on nimbus):
+### Run topology on nimbus (with shell on nimbus):
 ```bash
 $ storm jar /topology.jar MainTopology Mytopology
 ```
+##### Alternatively:
+- configure enviroment variables (*TOPOLOGY_JAR, TOPOLOGY_MAIN, TOPOLOGY_Name*) in [Dockerfile](/jfr_storm/Dockerfile)
+
+- on nimbus shell: 
+
+
+```bash
+  /./deploy_topology.sh
+```
+
 
 #### Accessing via Browser on host:
 
