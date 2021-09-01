@@ -24,6 +24,20 @@ Run topology on nimbus (with shell on nimbus):
 ```bash
 $ storm jar /topology.jar MainTopology Mytopology
 ```
+
+#### Accessing via Browser on host:
+
+Storm UI:
+http://localhost:8080 
+
+Graphite Dashboard:
+http://localhost
+
+Grafana Dashboard:
+http://localhost:3000 (userdetails: admin/admin)
+
+
+
 Configuration
 ----
 Adding configs to [storm.yaml](/jfr_storm/storm.yaml) file overwrites the [default values](https://github.com/apache/storm/blob/v2.2.0/conf/defaults.yaml) (for version 2.2.0).

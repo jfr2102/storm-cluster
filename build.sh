@@ -1,4 +1,4 @@
 #!/bin/bash
 ./rm_container.sh
-sudo docker-compose up --force-recreate --build
-
+sudo docker-compose up --build
+#--force-recreate

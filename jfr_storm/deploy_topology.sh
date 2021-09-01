@@ -1,0 +1,3 @@
+#!/bin/bash
+
+storm jar #TOPOLOGY_JAR #TOPOLOGY_MAIN #TOPOLOGY_NAME
