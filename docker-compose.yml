@@ -31,7 +31,6 @@ services:
       - nimbus
       - zookeeper
     restart: always
-    # test ob dann http://644e5353ce74:8000/api/v1/daemonlog?file=supervisor.log erreichbar
 
   ui:
     image: storm
@@ -50,14 +49,13 @@ services:
   graphite:
     image: graphiteapp/graphite-statsd
     container_name: storm_graphite
-    environment:
-    - STATSD_INTERFACE=tcp
+    #environment:
+    #- STATSD_INTERFACE=tcp
     ports:
     - 80:80
     - 2003-2004:2003-2004
     - 2023-2024:2023-2024
     - 8125:8125/udp
-    #- 8125:8125/udp
     - 8126:8126
     links:
      - nimbus
@@ -74,5 +72,26 @@ services:
     volumes:
     - grafana-storage:/var/lib/grafana
     restart: always
+
+  cadvisor:
+    image: google/cadvisor
+    container_name: my_cadvisor
+    environment: 
+    - storage_driver=statsd
+    - storage_driver_host=graphite:8125
+    entrypoint: usr/bin/cadvisor --logtostderr --storage_driver="statsd" --storage_driver_host="graphite:8125" --disable_metrics "disk,tcp,udp"
+    depends_on: 
+    -  graphite
+    ports:
+    - 8081:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:ro
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    - /dev/disk/:/dev/disk:ro
+    devices: 
+    - "/dev/kmsg" 
+
 volumes:
-  grafana-storage:
+ grafana-storage:
