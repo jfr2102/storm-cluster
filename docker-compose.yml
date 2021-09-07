@@ -22,7 +22,6 @@ services:
   supervisor:
     build: jfr_storm/.
     image: jfr_storm
-    #container_name: my_supervisor_1
     command: storm supervisor
     depends_on:
       - nimbus
@@ -40,8 +39,6 @@ services:
       - nimbus
     links:
      - nimbus
-#     - supervisor
-# - supervisor
     restart: always
     ports: 
      - 8080:8080
@@ -49,10 +46,8 @@ services:
   graphite:
     image: graphiteapp/graphite-statsd
     container_name: storm_graphite
-    #environment:
-    #- STATSD_INTERFACE=tcp
     ports:
-    - 80:80
+    - 8082:80
     - 2003-2004:2003-2004
     - 2023-2024:2023-2024
     - 8125:8125/udp
