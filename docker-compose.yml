@@ -10,7 +10,7 @@ services:
     image: jfr_storm
     container_name: my_nimbus
     command: storm nimbus
-    #-c nimbus.task.timeout.secs='13'
+    #-c nimbus.task.timeout.secs='15'
     depends_on: 
       - zookeeper
     links:
@@ -87,6 +87,20 @@ services:
     - /dev/disk/:/dev/disk:ro
     devices: 
     - "/dev/kmsg" 
-
+  kafka:
+    build: jfr_kafka/.
+    image: jfr_kafka
+    ports:
+    - 9094:9094
+    depends_on: 
+    - zookeeper
+    environment:
+      KAFA_KCREATE_TOPICS: "mytopic:1:1"
+      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
 volumes:
  grafana-storage:

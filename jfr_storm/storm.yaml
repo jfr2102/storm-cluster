@@ -2,15 +2,12 @@ storm.zookeeper.servers: [zookeeper]
 nimbus.seeds: [nimbus]
 storm.log.dir: "/logs"
 storm.local.dir: "/data"
-# just to see if its taking the correct config now
-#nimbus.code.freq.secs: 118
-
 #Unrecognized VM option 'PrintGCDateStamps' in worker logs, Worker crashing
 #https://stackoverflow.com/questions/56902645/topology-just-idles-on-storm-in-remote-mode
 
 worker.childopts: "-Xmx%HEAP-MEM%m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=artifacts/heapdump"
 
-#metrics reporter
+#metrics reporter V2 Metrics
 storm.metrics.reporters:
 #  Graphite Reporter
   - class: "org.apache.storm.metrics2.reporters.GraphiteStormReporter"
@@ -22,7 +19,11 @@ storm.metrics.reporters:
     report.period.units: "SECONDS"
     graphite.host: "graphite"
     graphite.port: 2003
-
+# Legacy Metrics System
+topology.metrics.consumer.register:
+  - class: "org.apache.storm.metric.LoggingMetricsConsumer"
+    parallelism.hint: 1
+topology.builtin.metrics.bucket.size.secs: 10
  # Console Reporter
   # - class: "org.apache.storm.metrics2.reporters.ConsoleStormReporter"
   #   daemons:
