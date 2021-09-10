@@ -1,8 +1,9 @@
 # Storm-cluster
 Storm docker cluster using docker-compose. 
 Including Graphite container for Storms [Metrics Reporting API v2](https://storm.apache.org/releases/2.2.0/metrics_v2.html) and Grafana for metrics visualization.
+Docker-compose also included example Kafka service as for exmample testdata source.
 
-Based on [Offical Apache Storm docker image](https://hub.docker.com/_/storm) , [Official docker image for Graphite](https://hub.docker.com/r/graphiteapp/graphite-statsd) and [The official Grafana docker container](https://hub.docker.com/r/grafana/grafana)
+Based on [offical Apache Storm docker image](https://hub.docker.com/_/storm) , [official docker image for Graphite](https://hub.docker.com/r/graphiteapp/graphite-statsd) [official Grafana docker container](https://hub.docker.com/r/grafana/grafana) and [wurstmeister Apache Kafka image](https://github.com/wurstmeister/kafka-docker)
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Apache_Storm_logo.svg/1200px-Apache_Storm_logo.svg.png" width="400" height="133" />
 
@@ -30,13 +31,22 @@ $ storm jar /topology.jar MainTopology Mytopology
 
 - on nimbus shell: 
 
-
 ```bash
   /./deploy_topology.sh
 ```
+### Write in Kafka example topic
+- get shell on kafka: 
 
+```bash
+  ./kafka.sh
+```
+- in /opt/kafka_(version) run:
 
-#### Accessing via Browser on host:
+```bash
+  ./writetopic.sh
+```
+
+### Accessing via Browser on host:
 
 Storm UI:
 http://localhost:8080 
