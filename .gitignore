@@ -1,0 +1,4 @@
+*.txt
+docker
+/*.csv
+*.json
