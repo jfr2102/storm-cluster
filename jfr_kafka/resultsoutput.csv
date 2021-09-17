@@ -1,1 +1,1 @@
-record.offset; record.key; record.value; record.timestamp; record.timestampType; latency;
+record.offset; record.key; record.value; record.timestamp; record.timestampType; latency; localTimestamp;
