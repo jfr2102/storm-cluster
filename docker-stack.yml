@@ -10,7 +10,7 @@ services:
 
   nimbus:
     build: jfr_storm/.
-    image: jfr_storm
+    image: localhost:5000/jfr_storm
     container_name: my_nimbus
     command: storm nimbus
     #-c nimbus.task.timeout.secs='15'
@@ -27,7 +27,7 @@ services:
 
   supervisor:
     build: jfr_storm/.
-    image: jfr_storm
+    image: localhost:5000/jfr_storm
     command: storm supervisor
     depends_on:
       - nimbus
@@ -109,7 +109,7 @@ services:
   #     mode: global
   kafka:
     build: jfr_kafka/.
-    image: jfr_kafka
+    image: localhost:5000/jfr_kafka
     ports:
     - 9094:9094
     depends_on: 
