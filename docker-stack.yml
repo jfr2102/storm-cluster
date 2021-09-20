@@ -1,0 +1,138 @@
+version: '3.1'
+services:
+  zookeeper:
+    image: zookeeper
+    container_name: my_zookeeper
+    restart: on-failure
+    deploy:
+      placement:
+        constraints: [ node.labels.Utilities == true ]
+
+  nimbus:
+    build: jfr_storm/.
+    image: jfr_storm
+    container_name: my_nimbus
+    command: storm nimbus
+    #-c nimbus.task.timeout.secs='15'
+    depends_on: 
+      - zookeeper
+    links:
+      - zookeeper
+    restart: on-failure
+    ports:
+      - 6627:6627
+    deploy:
+      placement:
+        constraints: [ node.labels.Storm-nodes == true ]
+
+  supervisor:
+    build: jfr_storm/.
+    image: jfr_storm
+    command: storm supervisor
+    depends_on:
+      - nimbus
+      - zookeeper
+    links:
+      - nimbus
+      - zookeeper
+    restart: on-failure
+    deploy:
+      replicas: 4
+      placement:
+        constraints: [ node.labels.Storm-nodes == true ]
+  ui:
+    image: storm
+    container_name: my_ui
+    command: storm ui
+    depends_on:
+      - nimbus
+    links:
+     - nimbus
+    restart: on-failure
+    ports: 
+     - 8080:8080
+    deploy:
+      placement:
+        constraints: [ node.labels.Utilities == true ]
+
+  graphite:
+    image: graphiteapp/graphite-statsd
+    container_name: storm_graphite
+    ports:
+    - 8082:80
+    - 2003-2004:2003-2004
+    - 2023-2024:2023-2024
+    - 8125:8125/udp
+    - 8126:8126
+    links:
+     - nimbus
+     - supervisor
+    restart: on-failure 
+    deploy:
+      placement:
+        constraints: [ node.labels.Utilities == true ]
+
+  grafana:
+    image: grafana/grafana
+    container_name: storm_grafana
+    ports:
+    - 3000:3000
+    links:
+    - graphite
+    volumes:
+    - grafana-storage:/var/lib/grafana
+    restart: on-failure
+    deploy:
+      placement:
+        constraints: [ node.labels.Utilities == true ]
+  # todo: global deploy?
+  # cadvisor:
+  #   image: google/cadvisor
+  #   container_name: my_cadvisor
+  #   environment: 
+  #   - storage_driver=statsd
+  #   - storage_driver_host=graphite:8125
+  #   entrypoint: usr/bin/cadvisor --logtostderr --storage_driver="statsd" --storage_driver_host="graphite:8125" --disable_metrics "disk,tcp,udp"
+  #   depends_on: 
+  #   -  graphite
+  #   ports:
+  #   - 8081:8080
+  #   volumes:
+  #   - /:/rootfs:ro
+  #   - /var/run:/var/run:ro
+  #   - /sys:/sys:ro
+  #   - /var/lib/docker/:/var/lib/docker:ro
+  #   - /dev/disk/:/dev/disk:ro
+  #   devices: 
+  #   - "/dev/kmsg" 
+  #   deploy:
+  #     mode: global
+  kafka:
+    build: jfr_kafka/.
+    image: jfr_kafka
+    ports:
+    - 9094:9094
+    depends_on: 
+    - zookeeper
+    environment:
+      KAFKA_CREATE_TOPICS: "mytopic:2:1,results:2:1"
+      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LOG_MESSAGE_TIMESTAMP_TYPE: LogAppendTime
+    deploy:
+      placement:
+        constraints: [ node.labels.Kafka == true ]
+  # for Storm state checkpointing 
+  # redis:
+  #   image: redis
+  #   ports: 
+  #   - 6379:6379
+volumes:
+ grafana-storage:
+
+
+#https://www.sweharris.org/post/2017-07-30-docker-placement/ placement for docker swarm mode todo

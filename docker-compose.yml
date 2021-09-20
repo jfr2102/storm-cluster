@@ -3,7 +3,7 @@ services:
   zookeeper:
     image: zookeeper
     container_name: my_zookeeper
-    restart: always
+    restart: on-failure
 
   nimbus:
     build: jfr_storm/.
@@ -15,7 +15,7 @@ services:
       - zookeeper
     links:
       - zookeeper
-    restart: always
+    restart: on-failure
     ports:
       - 6627:6627
 
@@ -29,7 +29,7 @@ services:
     links:
       - nimbus
       - zookeeper
-    restart: always
+    restart: on-failure
 
   ui:
     image: storm
@@ -39,7 +39,7 @@ services:
       - nimbus
     links:
      - nimbus
-    restart: always
+    restart: on-failure
     ports: 
      - 8080:8080
 
@@ -55,7 +55,7 @@ services:
     links:
      - nimbus
      - supervisor
-    restart: always 
+    restart: on-failure 
 
   grafana:
     image: grafana/grafana
@@ -66,7 +66,7 @@ services:
     - graphite
     volumes:
     - grafana-storage:/var/lib/grafana
-    restart: always
+    restart: on-failure
 
   cadvisor:
     image: google/cadvisor
@@ -102,6 +102,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LOG_MESSAGE_TIMESTAMP_TYPE: LogAppendTime
   # for Storm state checkpointing 
   # redis:
   #   image: redis
@@ -109,3 +110,6 @@ services:
   #   - 6379:6379
 volumes:
  grafana-storage:
+
+
+#https://www.sweharris.org/post/2017-07-30-docker-placement/ placement for docker swarm mode todo
