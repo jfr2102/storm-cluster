@@ -2,7 +2,6 @@ version: '3.8'
 services:
   zookeeper:
     image: zookeeper
-    container_name: my_zookeeper
     restart: on-failure
     deploy:
       placement:
@@ -11,7 +10,6 @@ services:
   nimbus:
     build: jfr_storm/.
     image: localhost:5000/jfr_storm
-    container_name: my_nimbus
     command: storm nimbus
     #-c nimbus.task.timeout.secs='15'
     depends_on: 
@@ -24,6 +22,7 @@ services:
     deploy:
       placement:
         constraints: [ node.labels.Storm-nodes == true ]
+        constrains: [ node.labels.nimbus == true ]
 
   supervisor:
     build: jfr_storm/.
@@ -39,8 +38,7 @@ services:
     deploy:
       replicas: 5
       placement:
-        constraints: 
-          - "node.labels.Storm-nodes == true"
+        constraints: [ node.labels.Storm-nodes == true ]
         max_replicas_per_node: 2
         # spread replicas evenly over nodes with flag supervisor
         preferences:
@@ -48,7 +46,6 @@ services:
 
   ui:
     image: storm
-    container_name: my_ui
     command: storm ui
     depends_on:
       - nimbus
@@ -63,7 +60,6 @@ services:
 
   graphite:
     image: graphiteapp/graphite-statsd
-    container_name: storm_graphite
     ports:
     - 8082:80
     - 2003-2004:2003-2004
@@ -80,7 +76,6 @@ services:
 
   grafana:
     image: grafana/grafana
-    container_name: storm_grafana
     ports:
     - 3000:3000
     links:
