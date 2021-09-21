@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 services:
   zookeeper:
     image: zookeeper
@@ -37,10 +37,14 @@ services:
       - zookeeper
     restart: on-failure
     deploy:
-      replicas: 4
+      replicas: 5
       placement:
-        constraints: [ node.labels.Storm-nodes == true ]
+        constraints: 
+          - "node.labels.Storm-nodes == true"
         max_replicas_per_node: 2
+        # spread replicas evenly over nodes with flag supervisor
+        preferences:
+          - spread: node.labels.supervisors
 
   ui:
     image: storm
