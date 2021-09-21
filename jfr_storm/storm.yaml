@@ -44,5 +44,6 @@ topology.builtin.metrics.bucket.size.secs: 10
   #   report.period: 10
   #   report.period.units: "SECONDS"
   #   csv.log.dir: "/log/csvlogging/"
-
+#Sate persistence: http://storm.apache.org/releases/2.2.0/State-checkpointing.html
+#topology.state.provider: org.apache.storm.redis.state.RedisKeyValueStateProvider
 
