@@ -21,8 +21,9 @@ services:
       - 6627:6627
     deploy:
       placement:
-        constraints: [ node.labels.Storm-nodes == true ]
-        constrains: [ node.labels.nimbus == true ]
+        constraints:
+          - node.labels.Storm-nodes == true
+          - node.labels.nimbus == true
 
   supervisor:
     build: jfr_storm/.
