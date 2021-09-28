@@ -1,7 +1,7 @@
 FROM storm:latest
 #install nc for debugging purpose
-RUN apt-get update
-RUN apt-get install -y netcat 
+#RUN apt-get update
+#RUN apt-get install -y netcat 
 # OVERWRITE CONFIG
 COPY storm.yaml "$STORM_CONF_DIR/storm.yaml"
 RUN chown storm:storm "$STORM_CONF_DIR/storm.yaml"

@@ -95,7 +95,6 @@ services:
   # todo: global deploy?
   cadvisor:
     image: google/cadvisor
-    container_name: my_cadvisor
     environment: 
     - storage_driver=statsd
     - storage_driver_host=graphite:8125
