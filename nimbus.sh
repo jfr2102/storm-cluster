@@ -1,4 +1,4 @@
 #!/bin/bash
-
-sudo docker exec -w / -it my_nimbus /bin/bash
+container=`docker ps -qf name=nimbus`
+sudo docker exec -w / -it $container /bin/bash
 
