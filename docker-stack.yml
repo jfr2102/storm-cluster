@@ -70,10 +70,14 @@ services:
     links:
      - nimbus
      - supervisor
-    restart: on-failure 
+    volumes:
+      - graphite/configs:/opt/graphite/conf\
+      - graphite/data:/opt/graphite/storage\
+      - graphite/statsd_config:/opt/statsd/config\
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ]
+    restart: on-failure 
 
   grafana:
     image: grafana/grafana
@@ -118,6 +122,8 @@ services:
     - 9094:9094
     depends_on: 
     - zookeeper
+    volumes: 
+    - kafka-outputs:/kafka-outputs
     environment:
       KAFKA_CREATE_TOPICS: "mytopic:2:1,results:2:1"
       HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
