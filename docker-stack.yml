@@ -71,9 +71,9 @@ services:
      - nimbus
      - supervisor
     volumes:
-      - graphite/configs:/opt/graphite/conf\
-      - graphite/data:/opt/graphite/storage\
-      - graphite/statsd_config:/opt/statsd/config\
+      - graphite-configs:/opt/graphite/conf\
+      - graphite-data:/opt/graphite/storage\
+      - graphite-statsd_config:/opt/statsd/config\
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ]
@@ -142,7 +142,13 @@ services:
   #   ports: 
   #   - 6379:6379
 volumes:
- grafana-storage:
+  grafana-storage:
+  graphite-configs:
+  graphite-data:
+  graphite-statsd_config:
+  kafka-outputs:
+
+
 
 
 #https://www.sweharris.org/post/2017-07-30-docker-placement/ placement for docker swarm mode todo
