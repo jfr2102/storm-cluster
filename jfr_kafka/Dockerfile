@@ -24,7 +24,7 @@ RUN sed -i "s/#FETCHER_JAR/${FETCHER_JAR}/" fetcher.sh
 RUN sed -i "s/#GENERATOR_JAR/${GENERATOR_JAR}/" generator.sh
 
 # make shellscripts executable 
-RUN chmod +x opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/listener.sh
+#RUN chmod +x opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/listener.sh
 RUN chmod +x opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/fetcher.sh
 RUN chmod +x opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/generator.sh
 
