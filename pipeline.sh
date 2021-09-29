@@ -5,5 +5,5 @@ git pull
 ./push.sh
 sleep 30s
 ./deploy.sh
-sleep 30s
+sleep 1m
 ./deploytopology.sh
