@@ -5,4 +5,4 @@ git pull
 ./push.sh
 ./deploy.sh
 sleep 1m
-./deploytoplogy.sh
+./deploytopology.sh
