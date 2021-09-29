@@ -6,5 +6,3 @@ git pull
 ./deploy.sh
 sleep 1m
 ./deploytoplogy.sh
-sleep 1m
-./testdriver.sh
