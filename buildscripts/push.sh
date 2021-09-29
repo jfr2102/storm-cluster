@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose -f docker-stack.yml push
+docker-compose -f ../docker-stack.yml push

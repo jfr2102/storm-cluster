@@ -1,1 +1,1 @@
-docker-compose -f docker-stack.yml build
+docker-compose -f ../docker-stack.yml build
