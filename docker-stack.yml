@@ -170,7 +170,7 @@ volumes:
   kafka-outputs:
 configs:
   prometheus.yml:
-    file: prometheus/prometheus.yml
+    file: prometheus.yml
 
 
 
