@@ -4,7 +4,7 @@ scrape_configs:
   dns_sd_configs:
    - names: ['tasks.cadvisor']
      type: 'A'
-     port: 8081
+     port: 8080 #internal port
   # static_configs:
   # - targets:
   #   - cadvisor:8081
