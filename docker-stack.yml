@@ -6,6 +6,7 @@ services:
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ]
+
   nimbus:
     build: jfr_storm/.
     image: localhost:5000/jfr_storm
@@ -23,6 +24,7 @@ services:
         constraints:
           - node.labels.Storm-nodes == true
           - node.labels.nimbus == true
+
   supervisor:
     build: jfr_storm/.
     image: localhost:5000/jfr_storm
@@ -42,6 +44,7 @@ services:
         # spread replicas evenly over nodes with flag supervisor
         preferences:
           - spread: node.labels.supervisors
+
   ui:
     image: storm
     command: storm ui
@@ -55,6 +58,7 @@ services:
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ]
+
   graphite:
     image: graphiteapp/graphite-statsd
     ports:
@@ -74,6 +78,7 @@ services:
       placement:
         constraints: [ node.labels.Utilities == true ]
     restart: on-failure 
+
   grafana:
     image: grafana/grafana
     ports:
@@ -86,6 +91,7 @@ services:
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ]
+
   # cadvisor:
   #   image: google/cadvisor
   #   environment: 
@@ -118,168 +124,7 @@ services:
     - /var/lib/docker/:/var/lib/docker:ro
     deploy:
       mode: global
-  kafka:
-    build: jfr_kafka/.
-    image: localhost:5000/jfr_kafka
-    ports:
-    - 9094:9094
-    depends_on: 
-    - zookeeper
-    volumes: 
-    - kafka-outputs:/kafka-outputs
-    environment:
-      KAFKA_CREATE_TOPICS: "mytopic:2:1,results:2:1"
-      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
-      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_LOG_MESSAGE_TIMESTAMP_TYPE: LogAppendTime
-    deploy:
-      placement:
-        constraints: [ node.labels.Kafka == true ]
-  # for Storm state checkpointing 
-  # redis:
-  #   image: redis
-  #   ports: 
-  #   - 6379:6379
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-    - 9090:9090
-    command:
-    - --config.file=/etc/prometheus/prometheus.yml
-    configs:
-    - source: prometheus.yml
-      target: /etc/prometheus/prometheus.yml
-  
-volumes:
-  grafana-storage:
-  graphite-configs:
-  graphite-data:
-  graphite-statsd_config:
-version: '3.8'
-services:
-  zookeeper:
-    image: zookeeper
-    restart: on-failure
-    deploy:
-      placement:
-        constraints: [ node.labels.Utilities == true ]
-  nimbus:
-    build: jfr_storm/.
-    image: localhost:5000/jfr_storm
-    command: storm nimbus
-    #-c nimbus.task.timeout.secs='15'
-    depends_on: 
-      - zookeeper
-    links:
-      - zookeeper
-    restart: on-failure
-    ports:
-      - 6627:6627
-    deploy:
-      placement:
-        constraints:
-          - node.labels.Storm-nodes == true
-          - node.labels.nimbus == true
-  supervisor:
-    build: jfr_storm/.
-    image: localhost:5000/jfr_storm
-    command: storm supervisor
-    depends_on:
-      - nimbus
-      - zookeeper
-    links:
-      - nimbus
-      - zookeeper
-    restart: on-failure
-    deploy:
-      replicas: 5
-      placement:
-        constraints: [ node.labels.Storm-nodes == true ]
-        max_replicas_per_node: 2
-        # spread replicas evenly over nodes with flag supervisor
-        preferences:
-          - spread: node.labels.supervisors
-  ui:
-    image: storm
-    command: storm ui
-    depends_on:
-      - nimbus
-    links:
-     - nimbus
-    restart: on-failure
-    ports: 
-     - 8080:8080
-    deploy:
-      placement:
-        constraints: [ node.labels.Utilities == true ]
-  graphite:
-    image: graphiteapp/graphite-statsd
-    ports:
-    - 8082:80
-    - 2003-2004:2003-2004
-    - 2023-2024:2023-2024
-    - 8125:8125/udp
-    - 8126:8126
-    links:
-     - nimbus
-     - supervisor
-    volumes:
-      - graphite-configs:/opt/graphite/conf\
-      - graphite-data:/opt/graphite/storage\
-      - graphite-statsd_config:/opt/statsd/config\
-    deploy:
-      placement:
-        constraints: [ node.labels.Utilities == true ]
-    restart: on-failure 
-  grafana:
-    image: grafana/grafana
-    ports:
-    - 3000:3000
-    links:
-    - graphite
-    volumes:
-    - grafana-storage:/var/lib/grafana
-    restart: on-failure
-    deploy:
-      placement:
-        constraints: [ node.labels.Utilities == true ]
-  # cadvisor:
-  #   image: google/cadvisor
-  #   environment: 
-  #   - storage_driver=statsd
-  #   - storage_driver_host=graphite:8125
-  #   entrypoint: usr/bin/cadvisor --logtostderr --storage_driver="statsd" --storage_driver_host="graphite:8125" --disable_metrics "disk,tcp,udp"
-  #   depends_on: 
-  #   -  graphite
-  #   ports:
-  #   - 8081:8080
-  #   volumes:
-  #   - /:/rootfs:ro
-  #   - /var/run:/var/run:ro
-  #   - /sys:/sys:ro
-  #   - /var/lib/docker/:/var/lib/docker:ro
-  #   - /dev/disk/:/dev/disk:ro
-  #   devices: 
-  #   - "/dev/kmsg" 
-  #   deploy:
-  #     mode: global
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    ports:
-    - 8081:8080
-    volumes:
-    - /:/rootfs:ro
-    - /var/run:/var/run:rw
-    - /sys:/sys:ro
-    - /var/lib/docker/:/var/lib/docker:ro
-    deploy:
-      mode: global
+
   kafka:
     build: jfr_kafka/.
     image: localhost:5000/jfr_kafka
@@ -326,3 +171,9 @@ volumes:
 configs:
   prometheus.yml:
     file: prometheus.yml
+
+
+
+
+
+#https://www.sweharris.org/post/2017-07-30-docker-placement/ placement for docker swarm mode todo
