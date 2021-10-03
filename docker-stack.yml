@@ -161,7 +161,9 @@ services:
     configs:
     - source: prometheus.yml
       target: /etc/prometheus/prometheus.yml
-  
+    deploy:
+      placement:
+        constraints: [ node.labels.Utilities == true ]  
 volumes:
   grafana-storage:
   graphite-configs:
