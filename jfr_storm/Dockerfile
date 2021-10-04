@@ -1,8 +1,8 @@
 FROM storm:latest
-#install nc for debugging purpose, iproute2 for pumba chaos test
+#install nc for debugging purpose, iproute2 for pumba chaos test, wget to fetch files
 RUN apt-get update -y
 #RUN apt-get install -y netcat
-RUN apt-get install -y iproute2 
+RUN apt-get install -y iproute2 wget
 # OVERWRITE CONFIG
 COPY storm.yaml "$STORM_CONF_DIR/storm.yaml"
 RUN chown storm:storm "$STORM_CONF_DIR/storm.yaml"
