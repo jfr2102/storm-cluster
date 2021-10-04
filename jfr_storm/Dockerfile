@@ -27,5 +27,5 @@ RUN sed -i "s/#TOPOLOGY_NAME/${TOPOLOGY_NAME}/" /deploy_topology.sh
 # prometheus metrics exporter
 ENV REPORTER_VERSION=0.0.2
 ENV REPORTER_JAR=storm-metrics-reporter-prometheus-${REPORTER_VERSION}.jar
-RUN WGET https://github.com/wizenoze/storm-metrics-reporter-prometheus/releases/download/${REPORTER_VERSION}/${REPORTER_JAR} -P extlib
+RUN wget https://github.com/wizenoze/storm-metrics-reporter-prometheus/releases/download/${REPORTER_VERSION}/${REPORTER_JAR} -P extlib
 RUN cp extilb/${REPORTER_JAR} extlib-daemon
