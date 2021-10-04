@@ -87,6 +87,8 @@ services:
     - graphite
     volumes:
     - grafana-storage:/var/lib/grafana
+    environment: 
+    - GF_INSTALL_PLUGINS=marcusolsson-csv-datasource
     restart: on-failure
     deploy:
       placement:
@@ -163,7 +165,16 @@ services:
       target: /etc/prometheus/prometheus.yml
     deploy:
       placement:
-        constraints: [ node.labels.Utilities == true ]  
+        constraints: [ node.labels.Utilities == true ]
+
+  pushgateway:
+    image: prom/pushgateway
+    ports:
+    - 9091:9091
+    deploy:
+      placement:
+        constraints: [ node.labels.Utilities == true ] 
+
 volumes:
   grafana-storage:
   graphite-configs:

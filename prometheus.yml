@@ -1,12 +1,19 @@
 scrape_configs:
+
 - job_name: cadvisor
   scrape_interval: 10s
   dns_sd_configs:
    - names: ['tasks.cadvisor']
      type: 'A'
      port: 8080 #internal port
+
 - job_name: nodeexport
   scrape_interval: 10s
   static_configs:
   - targets: ['172.24.38.172:9100', '172.24.38.173:9100', '172.24.38.174:9100', '172.24.38.175:9100', '172.24.38.176:9100']
+
+- job_name: pushgateway
+  scrape_interval: 10s
+  static_configs:
+  - targets: ['pushgateway:9091']
   
