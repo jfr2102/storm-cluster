@@ -173,9 +173,3 @@ volumes:
 configs:
   prometheus.yml:
     file: prometheus.yml
-
-
-
-
-
-#https://www.sweharris.org/post/2017-07-30-docker-placement/ placement for docker swarm mode todo

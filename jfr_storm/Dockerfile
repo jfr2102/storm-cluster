@@ -1,13 +1,11 @@
 FROM storm:latest
-#install nc for debugging purpose
-#RUN apt-get update
-#RUN apt-get install -y netcat 
+#install nc for debugging purpose, iproute2 for pumba chaos test
+RUN apt-get update -y
+#RUN apt-get install -y netcat
+RUN apt-get install -y iproute2 
 # OVERWRITE CONFIG
 COPY storm.yaml "$STORM_CONF_DIR/storm.yaml"
 RUN chown storm:storm "$STORM_CONF_DIR/storm.yaml"
-
-#COPY storm.yaml /conf/storm.yaml
-#CMD chown storm:storm /conf/storm.yaml
 
 ENV TOPOLOGY_JAR=topology.jar
 ENV TOPOLOGY_MAIN=MainTopology
@@ -25,4 +23,3 @@ RUN chmod +rwx /deploy_topology.sh
 RUN sed -i "s/#TOPOLOGY_JAR/${TOPOLOGY_JAR}/" /deploy_topology.sh
 RUN sed -i "s/#TOPOLOGY_MAIN/${TOPOLOGY_MAIN}/" /deploy_topology.sh
 RUN sed -i "s/#TOPOLOGY_NAME/${TOPOLOGY_NAME}/" /deploy_topology.sh
-#CMD storm jar "/$TOPOLOGY_JAR" "$TOPOLOGY_MAIN" "$TOPOLOGY_NAME"
