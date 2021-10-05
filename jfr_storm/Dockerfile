@@ -30,3 +30,4 @@ ENV REPORTER_JAR=storm-metrics-reporter-prometheus-${REPORTER_VERSION}.jar
 RUN wget https://github.com/wizenoze/storm-metrics-reporter-prometheus/releases/download/${REPORTER_VERSION}/${REPORTER_JAR} -P extlib
 RUN chown storm:storm extlib/${REPORTER_JAR}
 RUN cp extlib/${REPORTER_JAR} extlib-daemon
+RUN chown storm:storm extlib-daemon/${REPORTER_JAR}
