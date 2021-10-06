@@ -19,16 +19,16 @@ storm.metrics.reporters:
     report.period.units: "SECONDS"
     graphite.host: "graphite"
     graphite.port: 2003
-  - class: "com.wizenoze.storm.metrics2.reporters.PrometheusStormReporter"
-    daemons:
-        - "supervisor"
-        - "nimbus"
-        - "worker"
-    report.period: 10
-    report.period.units: "SECONDS" 
-    prometheus.scheme: "http"
-    prometheus.host: "pushgateway"
-    prometheus.port: 9091
+  # - class: "com.wizenoze.storm.metrics2.reporters.PrometheusStormReporter"
+  #   daemons:
+  #       - "supervisor"
+  #       - "nimbus"
+  #       - "worker"
+  #   report.period: 10
+  #   report.period.units: "SECONDS" 
+  #   prometheus.scheme: "http"
+  #   prometheus.host: "pushgateway"
+  #   prometheus.port: 9091
 
 # Legacy Metrics System
 topology.metrics.consumer.register:
