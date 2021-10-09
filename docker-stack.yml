@@ -37,7 +37,7 @@ services:
       - zookeeper
     restart: on-failure
     deploy:
-      replicas: 5
+      replicas: 6
       placement:
         constraints: [ node.labels.Storm-nodes == true ]
         max_replicas_per_node: 2
