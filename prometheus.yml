@@ -12,8 +12,8 @@ scrape_configs:
   static_configs:
   - targets: ['172.24.38.172:9100', '172.24.38.173:9100', '172.24.38.174:9100', '172.24.38.175:9100', '172.24.38.176:9100']
 
-# - job_name: pushgateway
-#   scrape_interval: 10s
-#   static_configs:
-#   - targets: ['pushgateway:9091']
+- job_name: pushgateway
+  scrape_interval: 10s
+  static_configs:
+  - targets: ['pushgateway:9091']
   
