@@ -167,13 +167,13 @@ services:
       placement:
         constraints: [ node.labels.Utilities == true ]
 
-  # pushgateway:
-  #   image: prom/pushgateway
-  #   ports:
-  #   - 9091:9091
-  #   deploy:
-  #     placement:
-  #       constraints: [ node.labels.Utilities == true ] 
+  pushgateway:
+    image: prom/pushgateway
+    ports:
+    - 9091:9091
+    deploy:
+      placement:
+        constraints: [ node.labels.Utilities == true ] 
 
 volumes:
   grafana-storage:
