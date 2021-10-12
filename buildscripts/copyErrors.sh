@@ -8,7 +8,7 @@ name2=`curl -s 'http://172.24.38.172:8080/api/v1/topology/summary' |  python3 -c
 echo $name1 > TopologyError.txt
 sudo docker exec -i $container storm get-errors $name1 >> TopologyError.txt
 
-echo $name2 > TopologyError.txt
+echo $name2 >> TopologyError.txt
 sudo docker exec -i $container storm get-errors $name2 >> TopologyError.txt
 
 sudo mkdir /storm-logs/$destination
