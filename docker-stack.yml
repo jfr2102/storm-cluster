@@ -2,7 +2,6 @@ version: '3.8'
 services:
   zookeeper:
     image: zookeeper
-    restart: on-failure
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ]
@@ -12,11 +11,6 @@ services:
     image: localhost:5000/jfr_storm
     command: storm nimbus
     #-c nimbus.task.timeout.secs='15'
-    depends_on: 
-      - zookeeper
-    links:
-      - zookeeper
-    restart: on-failure
     ports:
       - 6627:6627
     deploy:
@@ -29,13 +23,6 @@ services:
     build: jfr_storm/.
     image: localhost:5000/jfr_storm
     command: storm supervisor
-    depends_on:
-      - nimbus
-      - zookeeper
-    links:
-      - nimbus
-      - zookeeper
-    restart: on-failure
     deploy:
       replicas: 6
       placement:
@@ -48,11 +35,6 @@ services:
   ui:
     image: storm
     command: storm ui
-    depends_on:
-      - nimbus
-    links:
-     - nimbus
-    restart: on-failure
     ports: 
      - 8080:8080
     deploy:
@@ -83,13 +65,10 @@ services:
     image: grafana/grafana
     ports:
     - 3000:3000
-    links:
-    - graphite
     volumes:
     - grafana-storage:/var/lib/grafana
     environment: 
     - GF_INSTALL_PLUGINS=marcusolsson-csv-datasource
-    restart: on-failure
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ]
@@ -100,8 +79,6 @@ services:
   #   - storage_driver=statsd
   #   - storage_driver_host=graphite:8125
   #   entrypoint: usr/bin/cadvisor --logtostderr --storage_driver="statsd" --storage_driver_host="graphite:8125" --disable_metrics "disk,tcp,udp"
-  #   depends_on: 
-  #   -  graphite
   #   ports:
   #   - 8081:8080
   #   volumes:
@@ -132,8 +109,6 @@ services:
     image: localhost:5000/jfr_kafka
     ports:
     - 9094:9094
-    depends_on: 
-    - zookeeper
     volumes: 
     - kafka-outputs:/kafka-outputs
     environment:
@@ -153,6 +128,9 @@ services:
     image: redis
     ports: 
     - 6379:6379
+    deploy:
+      placement:
+        constraints: [ node.labels.Utilities == true ]
     
   prometheus:
     image: prom/prometheus:latest
@@ -177,9 +155,9 @@ services:
 
 volumes:
   grafana-storage:
-  graphite-configs:
-  graphite-data:
-  graphite-statsd_config:
+ # graphite-configs:
+ # graphite-data:
+ # graphite-statsd_config:
   kafka-outputs:
 configs:
   prometheus.yml:
