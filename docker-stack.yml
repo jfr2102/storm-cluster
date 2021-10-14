@@ -59,25 +59,25 @@ services:
       placement:
         constraints: [ node.labels.Utilities == true ]
 
-  graphite:
-    image: graphiteapp/graphite-statsd
-    ports:
-    - 8082:80
-    - 2003-2004:2003-2004
-    - 2023-2024:2023-2024
-    - 8125:8125/udp
-    - 8126:8126
-    links:
-     - nimbus
-     - supervisor
-    volumes:
-      - graphite-configs:/opt/graphite/conf\
-      - graphite-data:/opt/graphite/storage\
-      - graphite-statsd_config:/opt/statsd/config\
-    deploy:
-      placement:
-        constraints: [ node.labels.Utilities == true ]
-    restart: on-failure 
+  # graphite:
+  #   image: graphiteapp/graphite-statsd
+  #   ports:
+  #   - 8082:80
+  #   - 2003-2004:2003-2004
+  #   - 2023-2024:2023-2024
+  #   - 8125:8125/udp
+  #   - 8126:8126
+  #   links:
+  #    - nimbus
+  #    - supervisor
+  #   volumes:
+  #     - graphite-configs:/opt/graphite/conf\
+  #     - graphite-data:/opt/graphite/storage\
+  #     - graphite-statsd_config:/opt/statsd/config\
+  #   deploy:
+  #     placement:
+  #       constraints: [ node.labels.Utilities == true ]
+  #   restart: on-failure 
 
   grafana:
     image: grafana/grafana
@@ -114,9 +114,9 @@ services:
   #   - "/dev/kmsg" 
   #   deploy:
   #     mode: global
+
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
     ports:
     - 8081:8080
     volumes:
@@ -148,14 +148,14 @@ services:
     deploy:
       placement:
         constraints: [ node.labels.Kafka == true ]
-  # for Storm state checkpointing 
-  # redis:
-  #   image: redis
-  #   ports: 
-  #   - 6379:6379
+
+  redis:
+    image: redis
+    ports: 
+    - 6379:6379
+    
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
     ports:
     - 9090:9090
     command:

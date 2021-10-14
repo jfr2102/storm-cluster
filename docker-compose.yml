@@ -43,19 +43,19 @@ services:
     ports: 
      - 8080:8080
 
-  graphite:
-    image: graphiteapp/graphite-statsd
-    container_name: storm_graphite
-    ports:
-    - 8082:80
-    - 2003-2004:2003-2004
-    - 2023-2024:2023-2024
-    - 8125:8125/udp
-    - 8126:8126
-    links:
-     - nimbus
-     - supervisor
-    restart: on-failure 
+  # graphite:
+  #   image: graphiteapp/graphite-statsd
+  #   container_name: storm_graphite
+  #   ports:
+  #   - 8082:80
+  #   - 2003-2004:2003-2004
+  #   - 2023-2024:2023-2024
+  #   - 8125:8125/udp
+  #   - 8126:8126
+  #   links:
+  #    - nimbus
+  #    - supervisor
+  #   restart: on-failure 
 
   grafana:
     image: grafana/grafana
@@ -103,11 +103,7 @@ services:
       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_LOG_MESSAGE_TIMESTAMP_TYPE: LogAppendTime
-  # for Storm state checkpointing 
-  # redis:
-  #   image: redis
-  #   ports: 
-  #   - 6379:6379
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -119,6 +115,12 @@ services:
     - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     depends_on:
     -  cadvisor
+    
+  pushgateway:
+    image: prom/pushgateway
+    ports:
+    - 9091:9091
+
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
@@ -129,7 +131,10 @@ services:
     - /var/run:/var/run:rw
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
-
+  redis:
+    image: redis
+    ports: 
+    - 6379:6379
 volumes:
  grafana-storage:
 
