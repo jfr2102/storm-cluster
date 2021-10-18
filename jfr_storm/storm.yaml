@@ -6,6 +6,9 @@ storm.local.dir: "/data"
 #https://stackoverflow.com/questions/56902645/topology-just-idles-on-storm-in-remote-mode
 
 worker.childopts: "-Xmx%HEAP-MEM%m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=artifacts/heapdump"
+worker.heap.memory.mb: 1536
+topology.component.resources.onheap.memory.mb: 256.0
+topology.worker.max.heap.size.mb: 1536
 
 #metrics reporter V2 Metrics
 storm.metrics.reporters:
