@@ -112,7 +112,7 @@ services:
     volumes: 
     - kafka-outputs:/kafka-outputs
     environment:
-      KAFKA_CREATE_TOPICS: "mytopic:4:1,results:4:1"
+      KAFKA_CREATE_TOPICS: "mytopic:6:1,results:6:1"
       HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
