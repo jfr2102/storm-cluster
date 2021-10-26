@@ -7,7 +7,7 @@ storm.local.dir: "/data"
 
 worker.childopts: "-Xmx%HEAP-MEM%m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=artifacts/heapdump"
 worker.heap.memory.mb: 1536
-topology.component.resources.onheap.memory.mb: 256.0
+topology.component.resources.onheap.memory.mb: 512.0
 topology.worker.max.heap.size.mb: 1536
 #topology.max.spout.pending: 500000
 
