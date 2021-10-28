@@ -7,6 +7,7 @@ RUN apt-get install -y iproute2 wget
 COPY storm.yaml "$STORM_CONF_DIR/storm.yaml"
 RUN chown storm:storm "$STORM_CONF_DIR/storm.yaml"
 
+ARG DISTRO_NAME=apache-storm-2.3.0
 ENV TOPOLOGY_JAR=topology.jar
 ENV TOPOLOGY_MAIN=MainTopology
 ENV TOPOLOGY_NAME=MyTopology
