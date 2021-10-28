@@ -1,4 +1,76 @@
-FROM storm:latest
+FROM openjdk:11-jre-slim
+
+ENV STORM_CONF_DIR=/conf \
+    STORM_DATA_DIR=/data \
+    STORM_LOG_DIR=/logs
+
+# Add a user with an explicit UID/GID and create necessary directories
+RUN set -eux; \
+    groupadd -r storm --gid=1000; \
+    useradd -r -g storm --uid=1000 storm; \
+    mkdir -p "$STORM_CONF_DIR" "$STORM_DATA_DIR" "$STORM_LOG_DIR"; \
+    chown -R storm:storm "$STORM_CONF_DIR" "$STORM_DATA_DIR" "$STORM_LOG_DIR"``
+
+# Install required packages
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y --no-install-recommends \
+        bash \
+        ca-certificates \
+        dirmngr \
+        gosu \
+        gnupg \
+        python \
+        procps \
+        wget; \
+    rm -rf /var/lib/apt/lists/*; \
+# Verify that gosu binary works
+    gosu nobody true
+
+ARG GPG_KEY=79B03D059E628478FC9F1D8B152CAD0C46E87B61
+ARG DISTRO_NAME=apache-storm-2.3.0
+
+# Download Apache Storm, verify its PGP signature, untar and clean up
+RUN set -eux; \
+    ddist() { \
+        local f="$1"; shift; \
+        local distFile="$1"; shift; \
+        local success=; \
+        local distUrl=; \
+        for distUrl in \
+            'https://www.apache.org/dyn/closer.cgi?action=download&filename=' \
+            https://www-us.apache.org/dist/ \
+            https://www.apache.org/dist/ \
+            https://archive.apache.org/dist/ \
+        ; do \
+            if wget -q -O "$f" "$distUrl$distFile" && [ -s "$f" ]; then \
+                success=1; \
+                break; \
+            fi; \
+        done; \
+        [ -n "$success" ]; \
+    }; \
+    ddist "$DISTRO_NAME.tar.gz" "storm/$DISTRO_NAME/$DISTRO_NAME.tar.gz"; \
+    ddist "$DISTRO_NAME.tar.gz.asc" "storm/$DISTRO_NAME/$DISTRO_NAME.tar.gz.asc"; \
+    export GNUPGHOME="$(mktemp -d)"; \
+    gpg --keyserver ha.pool.sks-keyservers.net --recv-key "$GPG_KEY" || \
+    gpg --keyserver pgp.mit.edu --recv-keys "$GPG_KEY" || \
+    gpg --keyserver keyserver.pgp.com --recv-keys "$GPG_KEY"; \
+    gpg --batch --verify "$DISTRO_NAME.tar.gz.asc" "$DISTRO_NAME.tar.gz"; \
+    tar -xzf "$DISTRO_NAME.tar.gz"; \
+    rm -rf "$GNUPGHOME" "$DISTRO_NAME.tar.gz" "$DISTRO_NAME.tar.gz.asc"; \
+    chown -R storm:storm "$DISTRO_NAME"
+
+WORKDIR $DISTRO_NAME
+
+ENV PATH $PATH:/$DISTRO_NAME/bin
+
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+
+#FROM storm:latest
 #install nc for debugging purpose, iproute2 for pumba chaos test, wget to fetch files
 RUN apt-get update -y
 #RUN apt-get install -y netcat
@@ -7,7 +79,6 @@ RUN apt-get install -y iproute2 wget
 COPY storm.yaml "$STORM_CONF_DIR/storm.yaml"
 RUN chown storm:storm "$STORM_CONF_DIR/storm.yaml"
 
-ARG DISTRO_NAME=apache-storm-2.3.0
 ENV TOPOLOGY_JAR=topology.jar
 ENV TOPOLOGY_MAIN=MainTopology
 ENV TOPOLOGY_NAME=MyTopology
