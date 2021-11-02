@@ -1,8 +1,8 @@
 #!/bin/bash
 git pull
-./removestack.sh
-./stackbuild.sh
-./push.sh
+nohup ./removestack.sh
+nohup ./stackbuild.sh
+nohup ./push.sh
 sleep 5s
 ./deploy.sh
 sleep 1m
