@@ -1,1 +1,1 @@
-docker-compose -f ../docker-stack.yml build
+nohup docker-compose -f ../docker-stack.yml build
