@@ -33,7 +33,7 @@ services:
           - spread: node.labels.supervisors
 
   ui:
-    image: storm
+    image: storm:2.2.0
     command: storm ui
     ports: 
      - 8080:8080
