@@ -1,1 +1,1 @@
-index;partition;city;data;metadata.timestamp;localTimestamp;
+msg_count;sleep_short;sleep_long;sleep_factor;note;timestamp;
