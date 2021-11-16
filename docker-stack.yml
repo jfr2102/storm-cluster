@@ -119,7 +119,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_LOG_MESSAGE_TIMESTAMP_TYPE: LogAppendTime
+     #KAFKA_LOG_MESSAGE_TIMESTAMP_TYPE: LogAppendTime
     deploy:
       placement:
         constraints: [ node.labels.Kafka == true ]
