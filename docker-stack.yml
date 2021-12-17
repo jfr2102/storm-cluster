@@ -16,8 +16,8 @@ services:
       replicas: 2
       placement:
         constraints:
-          - node.labels.Storm-nodes == true
           - node.labels.nimbus == true
+        max_replicas_per_node: 1
 
   supervisor:
     build: jfr_storm/.
