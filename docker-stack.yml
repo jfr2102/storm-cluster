@@ -10,10 +10,10 @@ services:
     build: jfr_storm/.
     image: localhost:5000/jfr_storm
     command: storm nimbus
-    #-c nimbus.task.timeout.secs='15'
-    ports:
-      - 6627:6627
+    # ports:
+    #   - 6627:6627
     deploy:
+      replicas: 2
       placement:
         constraints:
           - node.labels.Storm-nodes == true
