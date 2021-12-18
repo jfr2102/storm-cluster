@@ -14,8 +14,13 @@ Configuration:
 - For swarm deploy [set up docker swarm](https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/) and set labels / edit placement labels accordingly in [docker-stack.yml](/docker-stack.yml)
 - Adding configs to [storm.yaml](/jfr_storm/storm.yaml) file overwrites the [default values](https://github.com/apache/storm/blob/v2.2.0/conf/defaults.yaml) (for version 2.2.0).
 - configure the used metric exporter and potential metric filter regex expressions according to Prometheus/Graphite usage in [storm.yaml](/jfr_storm/storm.yaml)
-- to collect host metrics with the included Prometheus service install and start [Prometheus Node exporter](https://prometheus.io/docs/guides/node-exporter/) on hosts: 
-
+- to collect host metrics with the included Prometheus service install and start [Prometheus Node exporter](https://prometheus.io/docs/guides/node-exporter/) on hosts
+- If graphite is used set cAdvisor enviroment variable to use statsd storage driver of the graphite service:
+```yaml
+environment: 
+- storage_driver=statsd
+- storage_driver_host=graphite:8125
+```
 
 Usage:
 -----
@@ -60,7 +65,7 @@ $ storm jar /topology.jar MainTopology Mytopology
 
 
 ### Accessing via Browser on host:
-When using swarm deployment, services are available  via all host IPs. ([see:](https://docs.docker.com/engine/swarm/ingress/))
+When using swarm deployment, services are available  via all host IPs. ([see: ingress](https://docs.docker.com/engine/swarm/ingress/))
 
 Storm UI:
 http://host:8080 
