@@ -1,7 +1,7 @@
 # Storm-cluster
 Storm docker cluster using docker-compose. 
 Including a Prometheus/Graphite container for Storms [Metrics Reporting API v2](https://storm.apache.org/releases/2.2.0/metrics_v2.html) and Grafana for metrics visualization.
-Docker-compose also included example Kafka service as example testdata source.
+Docker-compose/stack also includes Kafka service as example testdata source.
 
 Based on [offical Apache Storm docker image](https://hub.docker.com/_/storm) , [Graphite docker image](https://hub.docker.com/r/graphiteapp/graphite-statsd) / [Prometheus docker image](https://hub.docker.com/r/prom/prometheus),
 [Grafana docker image](https://hub.docker.com/r/grafana/grafana), [wurstmeister Apache Kafka image](https://github.com/wurstmeister/kafka-docker) and [cAdvisor](https://hub.docker.com/r/google/cadvisor/).

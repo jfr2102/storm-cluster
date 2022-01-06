@@ -10,10 +10,8 @@ services:
     build: jfr_storm/.
     image: localhost:5000/jfr_storm
     command: storm nimbus
-    # ports:
-    #   - 6627:6627
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - node.labels.nimbus == true
@@ -41,26 +39,6 @@ services:
       placement:
         constraints: [ node.labels.Utilities == true ]
 
-  # graphite:
-  #   image: graphiteapp/graphite-statsd
-  #   ports:
-  #   - 8082:80
-  #   - 2003-2004:2003-2004
-  #   - 2023-2024:2023-2024
-  #   - 8125:8125/udp
-  #   - 8126:8126
-  #   links:
-  #    - nimbus
-  #    - supervisor
-  #   volumes:
-  #     - graphite-configs:/opt/graphite/conf\
-  #     - graphite-data:/opt/graphite/storage\
-  #     - graphite-statsd_config:/opt/statsd/config\
-  #   deploy:
-  #     placement:
-  #       constraints: [ node.labels.Utilities == true ]
-  #   restart: on-failure 
-
   grafana:
     image: grafana/grafana
     ports:
@@ -72,25 +50,6 @@ services:
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ]
-
-  # cadvisor:
-  #   image: google/cadvisor
-  #   environment: 
-  #   - storage_driver=statsd
-  #   - storage_driver_host=graphite:8125
-  #   entrypoint: usr/bin/cadvisor --logtostderr --storage_driver="statsd" --storage_driver_host="graphite:8125" --disable_metrics "disk,tcp,udp"
-  #   ports:
-  #   - 8081:8080
-  #   volumes:
-  #   - /:/rootfs:ro
-  #   - /var/run:/var/run:ro
-  #   - /sys:/sys:ro
-  #   - /var/lib/docker/:/var/lib/docker:ro
-  #   - /dev/disk/:/dev/disk:ro
-  #   devices: 
-  #   - "/dev/kmsg" 
-  #   deploy:
-  #     mode: global
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -152,7 +111,43 @@ services:
     deploy:
       placement:
         constraints: [ node.labels.Utilities == true ] 
-
+  # graphite:
+  #   image: graphiteapp/graphite-statsd
+  #   ports:
+  #   - 8082:80
+  #   - 2003-2004:2003-2004
+  #   - 2023-2024:2023-2024
+  #   - 8125:8125/udp
+  #   - 8126:8126
+  #   links:
+  #    - nimbus
+  #    - supervisor
+  #   volumes:
+  #     - graphite-configs:/opt/graphite/conf\
+  #     - graphite-data:/opt/graphite/storage\
+  #     - graphite-statsd_config:/opt/statsd/config\
+  #   deploy:
+  #     placement:
+  #       constraints: [ node.labels.Utilities == true ]
+  #   restart: on-failure 
+    # cadvisor:
+  #   image: google/cadvisor
+  #   environment: 
+  #   - storage_driver=statsd
+  #   - storage_driver_host=graphite:8125
+  #   entrypoint: usr/bin/cadvisor --logtostderr --storage_driver="statsd" --storage_driver_host="graphite:8125" --disable_metrics "disk,tcp,udp"
+  #   ports:
+  #   - 8081:8080
+  #   volumes:
+  #   - /:/rootfs:ro
+  #   - /var/run:/var/run:ro
+  #   - /sys:/sys:ro
+  #   - /var/lib/docker/:/var/lib/docker:ro
+  #   - /dev/disk/:/dev/disk:ro
+  #   devices: 
+  #   - "/dev/kmsg" 
+  #   deploy:
+  #     mode: global
 volumes:
   grafana-storage:
  # graphite-configs:
